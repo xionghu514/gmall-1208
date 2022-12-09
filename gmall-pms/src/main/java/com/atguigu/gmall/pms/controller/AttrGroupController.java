@@ -33,6 +33,14 @@ public class AttrGroupController {
     @Autowired
     private AttrGroupService attrGroupService;
 
+    @GetMapping("/withattrs/{catId}")
+    @ApiOperation("根据 分类Id 查询 分组以及组下的基本属性规格参数")
+    public ResponseVo<List<AttrGroupEntity>> queryAttrGroupAndAttr(@PathVariable("catId") Long catId) {
+        List<AttrGroupEntity> attrGroupEntities = attrGroupService.queryAttrGroupAndAttr(catId);
+
+        return ResponseVo.ok(attrGroupEntities);
+    }
+
     @GetMapping("/category/{cid}")
     @ApiOperation("根据分类id查询分组")
     public ResponseVo<List<AttrGroupEntity>> queryAttrGroupsByCid(@PathVariable("cid") Long cid) {
