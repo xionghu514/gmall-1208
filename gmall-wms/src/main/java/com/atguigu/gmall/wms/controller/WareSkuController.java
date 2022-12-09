@@ -5,6 +5,7 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.wms.entity.WareSkuEntity;
 import com.atguigu.gmall.wms.service.WareSkuService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,16 @@ public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
 
+    @GetMapping("/sku/{skuId}")
+    @ApiOperation("根据 skuId 查询 库存")
+    public ResponseVo<List<WareSkuEntity>> queryWareSkuEntities(@PathVariable("skuId") Long skuId) {
+        List<WareSkuEntity> wareSkuEntities = wareSkuService.list(
+                new LambdaQueryWrapper<WareSkuEntity>()
+                        .eq(WareSkuEntity::getSkuId, skuId)
+        );
+
+        return ResponseVo.ok(wareSkuEntities);
+    }
 
     /**
      * 列表
