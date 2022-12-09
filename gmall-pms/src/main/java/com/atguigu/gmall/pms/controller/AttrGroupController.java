@@ -36,7 +36,10 @@ public class AttrGroupController {
     @GetMapping("/category/{cid}")
     @ApiOperation("根据分类id查询分组")
     public ResponseVo<List<AttrGroupEntity>> queryAttrGroupsByCid(@PathVariable("cid") Long cid) {
-        List<AttrGroupEntity> attrGroupEntityList = attrGroupService.list(new LambdaQueryWrapper<AttrGroupEntity>().eq(AttrGroupEntity::getCategoryId, cid));
+        List<AttrGroupEntity> attrGroupEntityList = attrGroupService.list(
+                new LambdaQueryWrapper<AttrGroupEntity>()
+                        .eq(AttrGroupEntity::getCategoryId, cid)
+        );
 
         return ResponseVo.ok(attrGroupEntityList);
     }
