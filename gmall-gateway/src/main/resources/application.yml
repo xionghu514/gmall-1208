@@ -5,12 +5,12 @@ spring:
     nacos:
       discovery:
         server-addr: 192.168.0.101:8848
-    gateway:
-      routes:
-        - id: pms-route
-          uri: lb://pms-service
-          predicates:
-            - Path=/pms/**
+    gateway: # 网关
+      routes: # 路由
+        - id: pms-route # 路由唯一标识, 商品管理路由
+          uri: lb://pms-service # 路由到那里, 路由到服务名对应的服务
+          predicates: # 断言
+            - Path=/pms/** # 什么样的请求到此路由 进而进入路由该服务. pms 开头的请求 都 路由到 pms-service 服务
         - id: sms-route
           uri: lb://sms-service
           predicates:
