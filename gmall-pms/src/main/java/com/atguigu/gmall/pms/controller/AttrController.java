@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -32,6 +33,17 @@ public class AttrController {
 
     @Autowired
     private AttrService attrService;
+
+    @GetMapping("/category/{cid}")
+    @ApiOperation("查询分类下的规格参数")
+    public ResponseVo<List<AttrEntity>> queryAttrEntitiesByCid(@PathVariable("cid") Long cid,
+                                                               @RequestParam(value = "type",required = false) Integer type,
+                                                               @RequestParam(value = "searchType", required = false) Integer searchType) {
+        List<AttrEntity> attrEntities = attrService.queryAttrEntitiesByCid(cid, type, searchType);
+
+        return ResponseVo.ok(attrEntities);
+    }
+
 
     @GetMapping("/group/{gid}")
     @ApiOperation("根据分组id求组下的规格参数")
