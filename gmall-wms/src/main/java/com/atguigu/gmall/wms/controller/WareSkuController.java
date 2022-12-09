@@ -32,6 +32,7 @@ public class WareSkuController {
     @Autowired
     private WareSkuService wareSkuService;
 
+
     /**
      * 列表
      */
