@@ -1,5 +1,6 @@
 package com.atguigu.gmall.pms.service.impl;
 
+import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.pms.entity.AttrEntity;
@@ -40,16 +41,18 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupMapper, AttrGroup
                         .eq(AttrGroupEntity::getCategoryId, catId)
         );
         // 便利分组集合 设置分组里的规格参数集合
-        attrGroupEntities.forEach(attrGroupEntity -> {
-            attrGroupEntity.setAttrEntities(
-                    // 根据分组的Id查询规格参数
-                    attrMapper.selectList(
-                            new LambdaQueryWrapper<AttrEntity>()
-                                    .eq(AttrEntity::getGroupId, attrGroupEntity.getId())
-                                    .eq(AttrEntity::getType, 1)
-                    )
-            );
-        });
+        if (CollectionUtils.isNotEmpty(attrGroupEntities)) {
+            attrGroupEntities.forEach(attrGroupEntity -> {
+                attrGroupEntity.setAttrEntities(
+                        // 根据分组的Id查询规格参数
+                        attrMapper.selectList(
+                                new LambdaQueryWrapper<AttrEntity>()
+                                        .eq(AttrEntity::getGroupId, attrGroupEntity.getId())
+                                        .eq(AttrEntity::getType, 1)
+                        )
+                );
+            });
+        }
         return attrGroupEntities;
     }
 
