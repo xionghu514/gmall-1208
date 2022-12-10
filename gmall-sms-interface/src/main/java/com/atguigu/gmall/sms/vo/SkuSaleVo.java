@@ -55,7 +55,7 @@ public class SkuSaleVo {
     /**
      * 满几件
      */
-    private Integer fullCount;
+    private BigDecimal fullCount;
     /**
      * 打几折
      */

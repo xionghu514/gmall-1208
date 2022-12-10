@@ -86,7 +86,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     public void bigSave(SpuVo spu) {
         // 设置创建spu的时间 和 修改spu的时间
         spu.setCreateTime(new Date());
-        spu.setUpdateTime(spu.getUpdateTime());
+        spu.setUpdateTime(spu.getCreateTime());
         // 保存spu信息, 因为spuVo继承spuEntity, 所以不用进行转换
         save(spu);
         // 获取spuId
@@ -104,7 +104,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         }
 
         // 保存 spuAttrValue 表信息
-        List<BaseAttrVo> baseAttrVos = spu.getBaseAttrVos();
+        List<BaseAttrVo> baseAttrVos = spu.getBaseAttrs();
         if (CollectionUtils.isNotEmpty(baseAttrVos)) {
             spuAttrValueService.saveBatch(baseAttrVos.stream()
                     .map(baseAttrVo -> {
@@ -169,6 +169,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
 
             SkuSaleVo skuSaleVo = new SkuSaleVo();
             BeanUtils.copyProperties(skuVo, skuSaleVo);
+            skuSaleVo.setSkuId(skuId);
             smsClice.saveSales(skuSaleVo);
         });
 

@@ -15,7 +15,7 @@ import java.util.List;
 public class SpuVo extends SpuEntity {
     private List<String> spuImages;
 
-    private List<BaseAttrVo> baseAttrVos;
+    private List<BaseAttrVo> baseAttrs;
 
     private List<SkuVo> skus;
 

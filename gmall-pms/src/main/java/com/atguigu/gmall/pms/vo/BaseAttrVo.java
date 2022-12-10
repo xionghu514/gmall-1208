@@ -15,7 +15,6 @@ import java.util.List;
  */
 @Data
 public class BaseAttrVo extends SpuAttrValueEntity {
-    private List<String> valueSelected;
 
     public void setValueSelected(List<String> valueSelected) {
         if (CollectionUtils.isEmpty(valueSelected)) {

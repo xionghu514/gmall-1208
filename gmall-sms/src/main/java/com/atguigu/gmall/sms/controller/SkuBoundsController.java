@@ -33,7 +33,7 @@ public class SkuBoundsController {
     @Autowired
     private SkuBoundsService skuBoundsService;
 
-    @GetMapping("sales/save")
+    @PostMapping("sales/save")
     public ResponseVo saveSales (@RequestBody SkuSaleVo skuSaleVo) {
         skuBoundsService.saveSales(skuSaleVo);
 

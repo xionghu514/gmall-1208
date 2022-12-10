@@ -41,13 +41,15 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
 
     @Override
     public void saveSales(SkuSaleVo skuSaleVo) {
+
+        System.out.println("skuSaleVo = " + skuSaleVo);
         SkuBoundsEntity skuBoundsEntity = new SkuBoundsEntity();
         BeanUtils.copyProperties(skuSaleVo, skuBoundsEntity);
 
         // 获取优惠生效情况
         List<Integer> work = skuSaleVo.getWork();
         if (CollectionUtils.isNotEmpty(work)) {
-            skuBoundsEntity.setWork(work.get(0) * 8 + work.get(1) * 4 + work.get(2) * 2 + work.get(3));
+            skuBoundsEntity.setWork(work.get(3) * 8 + work.get(2) * 4 + work.get(1) * 2 + work.get(0));
         }
         // 保存积分表
         save(skuBoundsEntity);
@@ -55,11 +57,13 @@ public class SkuBoundsServiceImpl extends ServiceImpl<SkuBoundsMapper, SkuBounds
         // 保存满减信息表
         SkuFullReductionEntity fullReductionEntity = new SkuFullReductionEntity();
         BeanUtils.copyProperties(skuSaleVo, fullReductionEntity);
+        fullReductionEntity.setAddOther(skuSaleVo.getFullAddOther());
         fullReductionMapper.insert(fullReductionEntity);
 
         // 保存打折表
         SkuLadderEntity ladderEntity = new SkuLadderEntity();
         BeanUtils.copyProperties(skuSaleVo, ladderEntity);
+        ladderEntity.setAddOther(skuSaleVo.getLadderAddOther());
         ladderMapper.insert(ladderEntity);
 
     }
