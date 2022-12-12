@@ -28,6 +28,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -83,40 +84,27 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     }
 
     @Override
+    @Transactional
     public void bigSave(SpuVo spu) {
-        // 设置创建spu的时间 和 修改spu的时间
-        spu.setCreateTime(new Date());
-        spu.setUpdateTime(spu.getCreateTime());
-        // 保存spu信息, 因为spuVo继承spuEntity, 所以不用进行转换
-        save(spu);
-        // 获取spuId
-        Long spuId = spu.getId();
+
+        //保存 spu 表信息
+        Long spuId = saveSpuInfo(spu);
+
 
         // 保存 spuDesc 表信息
-        List<String> spuImages = spu.getSpuImages();
-        if (CollectionUtils.isNotEmpty(spuImages)) {
-            String join = StringUtils.join(spuImages, ",");
-            // 创建 spuDesc 接受 信息
-            SpuDescEntity spuDescEntity = new SpuDescEntity();
-            spuDescEntity.setSpuId(spuId);
-            spuDescEntity.setDecript(join);
-            descMapper.insert(spuDescEntity);
-        }
+        saveSpuDesc(spu, spuId);
 
         // 保存 spuAttrValue 表信息
-        List<BaseAttrVo> baseAttrVos = spu.getBaseAttrs();
-        if (CollectionUtils.isNotEmpty(baseAttrVos)) {
-            spuAttrValueService.saveBatch(baseAttrVos.stream()
-                    .map(baseAttrVo -> {
-                        SpuAttrValueEntity attrValueEntity = new SpuAttrValueEntity();
-                        baseAttrVo.setSort(0);
-                        baseAttrVo.setSpuId(spuId);
-                        BeanUtils.copyProperties(baseAttrVo, attrValueEntity);
-                        return attrValueEntity;
-                    }).collect(Collectors.toList())
-            );
-        }
+        saveSpuAttrValue(spu, spuId);
 
+        // 保存 sku 相关信息
+        saveSkuInfo(spu, spuId);
+
+
+    }
+
+    @Transactional
+    public void saveSkuInfo(SpuVo spu, Long spuId) {
         List<SkuVo> skus = spu.getSkus();
         // 遍历 skuVo 集合
         skus.forEach(skuVo -> {
@@ -166,14 +154,53 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
                         }).collect(Collectors.toList())
                 );
             }
-
+            // 保存 sku 营销相关信息
             SkuSaleVo skuSaleVo = new SkuSaleVo();
             BeanUtils.copyProperties(skuVo, skuSaleVo);
             skuSaleVo.setSkuId(skuId);
             smsClice.saveSales(skuSaleVo);
         });
+    }
 
+    @Transactional
+    public void saveSpuAttrValue(SpuVo spu, Long spuId) {
+        List<BaseAttrVo> baseAttrVos = spu.getBaseAttrs();
+        if (CollectionUtils.isNotEmpty(baseAttrVos)) {
+            spuAttrValueService.saveBatch(baseAttrVos.stream()
+                    .map(baseAttrVo -> {
+                        SpuAttrValueEntity attrValueEntity = new SpuAttrValueEntity();
+                        baseAttrVo.setSort(0);
+                        baseAttrVo.setSpuId(spuId);
+                        BeanUtils.copyProperties(baseAttrVo, attrValueEntity);
+                        return attrValueEntity;
+                    }).collect(Collectors.toList())
+            );
+        }
+    }
 
+    @Transactional
+    public void saveSpuDesc(SpuVo spu, Long spuId) {
+        List<String> spuImages = spu.getSpuImages();
+        if (CollectionUtils.isNotEmpty(spuImages)) {
+            String join = StringUtils.join(spuImages, ",");
+            // 创建 spuDesc 接受 信息
+            SpuDescEntity spuDescEntity = new SpuDescEntity();
+            spuDescEntity.setSpuId(spuId);
+            spuDescEntity.setDecript(join);
+            descMapper.insert(spuDescEntity);
+        }
+    }
+
+    @Transactional
+    public Long saveSpuInfo(SpuVo spu) {
+        // 设置创建spu的时间 和 修改spu的时间
+        spu.setCreateTime(new Date());
+        spu.setUpdateTime(spu.getCreateTime());
+        // 保存spu信息, 因为spuVo继承spuEntity, 所以不用进行转换
+        save(spu);
+        // 获取spuId
+        Long spuId = spu.getId();
+        return spuId;
     }
 
 }
