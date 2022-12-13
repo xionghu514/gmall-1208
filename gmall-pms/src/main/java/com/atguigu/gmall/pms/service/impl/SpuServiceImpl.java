@@ -25,10 +25,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -84,7 +84,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
     }
 
     @Override
-    @Transactional
+    @GlobalTransactional
     public void bigSave(SpuVo spu) {
 
         //保存 spu 表信息
@@ -103,7 +103,6 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
 
     }
 
-    @Transactional
     public void saveSkuInfo(SpuVo spu, Long spuId) {
         List<SkuVo> skus = spu.getSkus();
         // 遍历 skuVo 集合
@@ -162,7 +161,6 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         });
     }
 
-    @Transactional
     public void saveSpuAttrValue(SpuVo spu, Long spuId) {
         List<BaseAttrVo> baseAttrVos = spu.getBaseAttrs();
         if (CollectionUtils.isNotEmpty(baseAttrVos)) {
@@ -178,7 +176,6 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         }
     }
 
-    @Transactional
     public void saveSpuDesc(SpuVo spu, Long spuId) {
         List<String> spuImages = spu.getSpuImages();
         if (CollectionUtils.isNotEmpty(spuImages)) {
@@ -191,7 +188,6 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         }
     }
 
-    @Transactional
     public Long saveSpuInfo(SpuVo spu) {
         // 设置创建spu的时间 和 修改spu的时间
         spu.setCreateTime(new Date());
