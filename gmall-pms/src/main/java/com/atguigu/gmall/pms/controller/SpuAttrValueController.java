@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -32,15 +33,15 @@ public class SpuAttrValueController {
     @Autowired
     private SpuAttrValueService spuAttrValueService;
 
-//    @GetMapping("spu/{spuId}")
-//    @ApiOperation("根据spuId查询基本属性")
-//    public ResponseVo<List<SpuAttrValueEntity>> querySpuAttrValuesBySpuId(@PathVariable("spuId") Long spuId) {
-//        List<SpuAttrValueEntity> spuAttrValueEntities = spuAttrValueService.list(
-//                new LambdaQueryWrapper<SpuAttrValueEntity>().eq(SpuAttrValueEntity::getSpuId, "spu_id")
-//        );
-//
-//        return ResponseVo.ok(spuAttrValueEntities);
-//    }
+    @GetMapping("search/attr/value/{cid}")
+    @ApiOperation("根据分类Id和spuId查询基础属性集合")
+    public ResponseVo<List<SpuAttrValueEntity>> querySpuAttrValueEntitiesBySpuIdAndCid(
+            @PathVariable("cid") Long cid,
+            @RequestParam("spuId") Long spuId
+    ) {
+        List<SpuAttrValueEntity> spuAttrValueEntities = spuAttrValueService.querySpuAttrValueEntitiesBySpuIdAndCid(cid, spuId);
+        return ResponseVo.ok(spuAttrValueEntities);
+    }
 
     /**
      * 列表

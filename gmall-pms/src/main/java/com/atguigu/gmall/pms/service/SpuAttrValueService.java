@@ -5,6 +5,8 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.pms.entity.SpuAttrValueEntity;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * spu属性值
  *
@@ -15,5 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface SpuAttrValueService extends IService<SpuAttrValueEntity> {
 
     PageResultVo queryPage(PageParamVo paramVo);
+
+    List<SpuAttrValueEntity> querySpuAttrValueEntitiesBySpuIdAndCid(Long cid, Long spuId);
 }
 
