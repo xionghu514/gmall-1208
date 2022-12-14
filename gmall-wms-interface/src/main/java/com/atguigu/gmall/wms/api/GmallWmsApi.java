@@ -15,7 +15,7 @@ import java.util.List;
  * @Email: 1796235969@qq.com
  */
 public interface GmallWmsApi {
-    @GetMapping("/sku/{skuId}")
+    @GetMapping("wms/waresku/sku/{skuId}")
     @ApiOperation("根据 skuId 查询 库存")
     public ResponseVo<List<WareSkuEntity>> queryWareSkuEntities(@PathVariable("skuId") Long skuId);
 }

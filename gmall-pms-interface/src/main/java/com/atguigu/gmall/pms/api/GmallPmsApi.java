@@ -4,6 +4,7 @@ import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.pms.entity.BrandEntity;
 import com.atguigu.gmall.pms.entity.CategoryEntity;
+import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
 import com.atguigu.gmall.pms.entity.SkuEntity;
 import com.atguigu.gmall.pms.entity.SpuAttrValueEntity;
 import com.atguigu.gmall.pms.entity.SpuEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -26,20 +28,31 @@ public interface GmallPmsApi {
     @ApiOperation("分页查询")
     public ResponseVo<List<SpuEntity>> querySpuByPageJson(@RequestBody PageParamVo paramVo);
 
-    @GetMapping("/spu/{spuId}")
+    @GetMapping("pms/sku/spu/{spuId}")
     @ApiOperation("根据 spuId 查询 sku")
     public ResponseVo<List<SkuEntity>> querySkusBySpuId(@PathVariable("spuId") Long spuId);
 
 
-    @GetMapping("{id}")
+    @GetMapping("pms/brand/{id}")
     @ApiOperation("详情查询")
     public ResponseVo<BrandEntity> queryBrandById(@PathVariable("id") Long id);
 
-    @GetMapping("{id}")
+    @GetMapping("pms/category/{id}")
     @ApiOperation("详情查询")
     public ResponseVo<CategoryEntity> queryCategoryById(@PathVariable("id") Long id);
 
-    @GetMapping("spu/{spuId}")
-    @ApiOperation("根据spuId查询基本属性")
-    public ResponseVo<List<SpuAttrValueEntity>> querySpuAttrValuesBySpuId(@PathVariable("spuId") Long spuId);
+
+    @GetMapping("pms/spuattrvalue/search/attr/value/{cid}")
+    @ApiOperation("根据分类Id和spuId查询基础属性集合")
+    public ResponseVo<List<SpuAttrValueEntity>> querySpuAttrValueEntitiesBySpuIdAndCid(
+            @PathVariable("cid") Long cid,
+            @RequestParam("spuId") Long spuId
+    );
+
+    @GetMapping("pms/skuattrvalue/search/attr/value/{cid}")
+    @ApiOperation("根据分类Id和skuId查询销售属性集合")
+    public ResponseVo<List<SkuAttrValueEntity>> querySkuAttrValueEntitiesBySkuIdAndCid(
+            @PathVariable("cid") Long cid,
+            @RequestParam("skuId") Long skuId
+    );
 }

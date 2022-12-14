@@ -1,5 +1,6 @@
 package com.atguigu.gmall.pms.service.impl;
 
+import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.pms.entity.AttrEntity;
@@ -40,6 +41,9 @@ public class SpuAttrValueServiceImpl extends ServiceImpl<SpuAttrValueMapper, Spu
                 new LambdaQueryWrapper<AttrEntity>().eq(AttrEntity::getCategoryId, cid)
                         .eq(AttrEntity::getSearchType, 1)
         );
+        if (CollectionUtils.isEmpty(attrEntities)) {
+            return null;
+        }
         List<Long> attrIds = attrEntities.stream().map(AttrEntity::getId).collect(Collectors.toList());
 
         // 根据检索属性的id 和 spuId 查询出普通类型的检索属性和值
