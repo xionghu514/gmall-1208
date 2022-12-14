@@ -1,23 +1,21 @@
 package com.atguigu.gmall.pms.controller;
 
-import java.util.List;
-
+import com.atguigu.gmall.common.bean.PageParamVo;
+import com.atguigu.gmall.common.bean.PageResultVo;
+import com.atguigu.gmall.common.bean.ResponseVo;
+import com.atguigu.gmall.pms.entity.SpuAttrValueEntity;
+import com.atguigu.gmall.pms.service.SpuAttrValueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atguigu.gmall.pms.entity.SpuAttrValueEntity;
-import com.atguigu.gmall.pms.service.SpuAttrValueService;
-import com.atguigu.gmall.common.bean.PageResultVo;
-import com.atguigu.gmall.common.bean.ResponseVo;
-import com.atguigu.gmall.common.bean.PageParamVo;
+import java.util.List;
 
 /**
  * spu属性值
@@ -33,6 +31,16 @@ public class SpuAttrValueController {
 
     @Autowired
     private SpuAttrValueService spuAttrValueService;
+
+//    @GetMapping("spu/{spuId}")
+//    @ApiOperation("根据spuId查询基本属性")
+//    public ResponseVo<List<SpuAttrValueEntity>> querySpuAttrValuesBySpuId(@PathVariable("spuId") Long spuId) {
+//        List<SpuAttrValueEntity> spuAttrValueEntities = spuAttrValueService.list(
+//                new LambdaQueryWrapper<SpuAttrValueEntity>().eq(SpuAttrValueEntity::getSpuId, "spu_id")
+//        );
+//
+//        return ResponseVo.ok(spuAttrValueEntities);
+//    }
 
     /**
      * 列表

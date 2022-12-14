@@ -33,6 +33,15 @@ public class SpuController {
     @Autowired
     private SpuService spuService;
 
+    @PostMapping("json")
+    @ApiOperation("分页查询")
+    public ResponseVo<List<SpuEntity>> querySpuByPageJson(@RequestBody PageParamVo paramVo){
+        PageResultVo pageResultVo = spuService.queryPage(paramVo);
+
+
+        return ResponseVo.ok((List<SpuEntity>)pageResultVo.getList());
+    }
+
     @GetMapping("/category/{categoryId}")
     @ApiOperation("根据分类id和分页参数信息获取spu集合")
     public ResponseVo<PageResultVo> querySpusByCidAndPage(@PathVariable("categoryId") Long cid,
