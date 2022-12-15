@@ -28,10 +28,13 @@ public interface GmallPmsApi {
     @ApiOperation("分页查询")
     public ResponseVo<List<SpuEntity>> querySpuByPageJson(@RequestBody PageParamVo paramVo);
 
+    @GetMapping("pms/spu/{id}")
+    @ApiOperation("spu详情查询")
+    public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id);
+
     @GetMapping("pms/sku/spu/{spuId}")
     @ApiOperation("根据 spuId 查询 sku")
     public ResponseVo<List<SkuEntity>> querySkusBySpuId(@PathVariable("spuId") Long spuId);
-
 
     @GetMapping("pms/brand/{id}")
     @ApiOperation("详情查询")

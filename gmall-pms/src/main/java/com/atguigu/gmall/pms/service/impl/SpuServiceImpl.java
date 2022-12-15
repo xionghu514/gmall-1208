@@ -104,6 +104,7 @@ public class SpuServiceImpl extends ServiceImpl<SpuMapper, SpuEntity> implements
         // 保存 sku 相关信息
         saveSkuInfo(spu, spuId);
 
+        rabbitTemplate.convertAndSend("PMS_SPU_EXCHANGE", "item.insert", spuId);
 
     }
 
