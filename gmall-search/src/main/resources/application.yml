@@ -23,6 +23,22 @@ spring:
   elasticsearch:
     rest:
       uris: http://192.168.0.101:9200
+  jackson:
+    default-property-inclusion: non_null # 默认属性包含, 不包含空字段
+  thymeleaf:
+    cache: false
+  rabbitmq:
+    host: 192.168.0.101
+    port: 5672
+    virtual-host: /admin
+    username: admin
+    password: admin
+    # 消费者确认
+    listener:
+      simple:
+        concurrency: 8
+        prefetch: 1
+        acknowledge-mode: manual # 手动确认
 feign:
   sentinel:
     enabled: true

@@ -110,6 +110,12 @@
 			<version>1.4.1</version>
 		</dependency>
 
+		<!--	rabbitmq	-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+
 		<!-- test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
