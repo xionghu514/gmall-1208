@@ -1,7 +1,13 @@
 package com.atguigu.gmall.index.controller;
 
+import com.atguigu.gmall.index.service.IndexService;
+import com.atguigu.gmall.pms.entity.CategoryEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 /**
  * @Description:
@@ -11,8 +17,14 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class IndexController {
+    @Autowired
+    private IndexService indexService;
+
     @GetMapping("/**")
-    public String index() {
+    public String index(Model model) {
+        List<CategoryEntity> categoryEntityList = indexService.queryCategoriesByPid();
+
+        model.addAttribute("categories", categoryEntityList);
 
         return "index";
     }

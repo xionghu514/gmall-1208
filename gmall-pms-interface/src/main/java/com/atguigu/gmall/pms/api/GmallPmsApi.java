@@ -44,6 +44,9 @@ public interface GmallPmsApi {
     @ApiOperation("详情查询")
     public ResponseVo<CategoryEntity> queryCategoryById(@PathVariable("id") Long id);
 
+    @GetMapping("pms/category/parent/{parentId}")
+    public ResponseVo<List<CategoryEntity>> queryCategoryByPid(@PathVariable("parentId") Long pid);
+
 
     @GetMapping("pms/spuattrvalue/search/attr/value/{cid}")
     @ApiOperation("根据分类Id和spuId查询基础属性集合")
