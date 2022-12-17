@@ -54,7 +54,7 @@ public class SearchListener {
 
 
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "SEARCH_SPU_QUEUE"),
+            value = @Queue(value = "SEARCH_INSERT_QUEUE"),
             exchange = @Exchange(value = "PMS_SPU_EXCHANGE", type = ExchangeTypes.TOPIC, ignoreDeclarationExceptions = "true"),
             key = {"item.*"}
     ))
