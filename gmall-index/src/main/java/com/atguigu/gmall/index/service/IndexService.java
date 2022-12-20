@@ -10,7 +10,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,11 +44,11 @@ public class IndexService {
 
         // 没有缓存，走远程调用
         List<CategoryEntity> categoryEntityList = pmsClient.queryLevel23CategoriesByPid(pid).getData();
-        // 为解决缓存穿透问题，数据即使为null也进行缓存，缓存时间不超过五分钟
+        // 解决缓存穿透，即使数据为null也进行缓存，缓存时间为5分钟
         if (CollectionUtils.isEmpty(categoryEntityList)) {
             redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoryEntityList), 5, TimeUnit.MINUTES);
-        } else {
-            redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoryEntityList), 90 + new Random().nextInt(10), TimeUnit.DAYS);
+        }else {
+            redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoryEntityList), 90, TimeUnit.DAYS);
         }
 
         return categoryEntityList;
