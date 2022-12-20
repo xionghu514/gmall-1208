@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.gmall.pms.mapper.CategoryMapper">
+    <resultMap id="categories" type="categoryEntity" autoMapping="true">
+        <id column="id" property="id"/>
+        <collection property="subs" javaType="List" ofType="categoryEntity">
+            <id column="subId" property="id" />
+            <result column="subName" property="name"/>
+        </collection>
+    </resultMap>
 
+<!--    <resultMap id="categories" type="categoryEntity" autoMapping="true">-->
+<!--        <id column="id" property="id"/>-->
+<!--        <collection property="subs" javaType="List" ofType="categoryEntity" select="queryCategoriesByPid" column="id">-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+
+    <select id="queryCategoriesByPid" resultMap="categories">
+        SELECT t1.id, t1.name, t2.id as subId, t2.name as subName
+        FROM `pms_category` t1
+        LEFT JOIN pms_category t2
+        ON t1.id = t2.parent_id
+        where t1.parent_id = #{pid}
+    </select>
+
+<!--    <select id="queryCategoriesByPid" resultMap="categories">-->
+<!--        SELECT *-->
+<!--        FROM  pms_category-->
+<!--        where parent_id = #{pid}-->
+<!--    </select>-->
 </mapper>

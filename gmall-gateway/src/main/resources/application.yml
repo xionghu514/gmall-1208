@@ -35,3 +35,8 @@ spring:
           uri: lb://index-service
           predicates:
             - Host=www.gmall.com, gmall.com
+        - id: index-route
+          uri: lb://index-service
+          predicates:
+            - Path=/index/**
+
