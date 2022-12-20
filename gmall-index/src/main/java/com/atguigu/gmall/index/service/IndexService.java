@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -48,7 +49,8 @@ public class IndexService {
         if (CollectionUtils.isEmpty(categoryEntityList)) {
             redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoryEntityList), 5, TimeUnit.MINUTES);
         }else {
-            redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoryEntityList), 90, TimeUnit.DAYS);
+            // 为解决缓存雪崩，给数据过期时间添加随机值
+            redisTemplate.opsForValue().set(KEY_PREFIX + pid, JSON.toJSONString(categoryEntityList), 90 + new Random().nextInt(10), TimeUnit.DAYS);
         }
 
         return categoryEntityList;
