@@ -57,4 +57,10 @@ class GmallItemApplicationTests {
 		System.out.println(pmsClient.querySpuById(7l));
 	}
 
+	@Test
+	void test4() {
+		// 5.根据skuId查询sku的图片列表
+		System.out.println(pmsClient.querySkuImagesBySkuId(1l));
+	}
+
 }

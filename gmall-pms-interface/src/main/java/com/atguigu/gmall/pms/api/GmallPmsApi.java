@@ -6,6 +6,7 @@ import com.atguigu.gmall.pms.entity.BrandEntity;
 import com.atguigu.gmall.pms.entity.CategoryEntity;
 import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
 import com.atguigu.gmall.pms.entity.SkuEntity;
+import com.atguigu.gmall.pms.entity.SkuImagesEntity;
 import com.atguigu.gmall.pms.entity.SpuAttrValueEntity;
 import com.atguigu.gmall.pms.entity.SpuEntity;
 import io.swagger.annotations.ApiOperation;
@@ -59,6 +60,10 @@ public interface GmallPmsApi {
 
     @GetMapping("pms/category/level23/{pid}")
     public ResponseVo<List<CategoryEntity>> queryLevel23CategoriesByPid(@PathVariable("pid") Long pid);
+
+    @GetMapping("pms/skuimages/sku/{skuId}")
+    @ApiOperation("根据skuId查询sku的图片列表")
+    public ResponseVo<List<SkuImagesEntity>> querySkuImagesBySkuId(@PathVariable("skuId") Long skuId);
 
 
     @GetMapping("pms/spuattrvalue/search/attr/value/{cid}")
