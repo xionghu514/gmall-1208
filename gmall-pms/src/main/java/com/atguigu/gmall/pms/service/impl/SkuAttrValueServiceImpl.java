@@ -1,5 +1,6 @@
 package com.atguigu.gmall.pms.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.atguigu.gmall.common.bean.PageParamVo;
 import com.atguigu.gmall.common.bean.PageResultVo;
@@ -32,6 +33,9 @@ public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, Sku
 
     @Autowired
     private SkuMapper skuMapper;
+
+    @Autowired
+    private SkuAttrValueMapper attrValueMapper;
 
     @Override
     public PageResultVo queryPage(PageParamVo paramVo) {
@@ -100,6 +104,22 @@ public class SkuAttrValueServiceImpl extends ServiceImpl<SkuAttrValueMapper, Sku
         });
 
         return saleAttrValueVos;
+    }
+
+    @Override
+    public String queryMappingBySpuId(Long spuId) {
+        // 根据spuId获取sku集合
+        List<SkuEntity> skuEntities = skuMapper.selectList(new LambdaQueryWrapper<SkuEntity>().eq(SkuEntity::getSpuId, spuId));
+
+        // 获取skuId集合
+        List<Long> skuIds = skuEntities.stream().map(SkuEntity::getId).collect(Collectors.toList());
+
+        // 获取规格参数和skuId关系
+        List<Map<String, Object>> maps = attrValueMapper.queryMappingBySkuIds(skuIds);
+
+        Map<String, Long> mappingMap = maps.stream().collect(Collectors.toMap(map -> map.get("attr_values").toString(), map ->(Long)map.get("sku_id")));
+
+        return JSON.toJSONString(mappingMap);
     }
 
 }

@@ -95,4 +95,17 @@ class GmallItemApplicationTests {
 		List<SaleAttrValueVo> data = pmsClient.querySaleAttrValuesBySpuId(7l).getData();
 		data.forEach(System.out::println);
 	}
+
+	@Test
+	void test8() {
+		// 9.根据skuId查询当前sku的销售属性
+		System.out.println(pmsClient.querySaleAttrValueBySkuId(1l).getData());
+	}
+
+	@Test
+	void test9() {
+		// 10.根据spuId查询spu下所有销售属性组合与skuId的映射关系
+		String data = pmsClient.queryMappingBySpuId(7l).getData();
+		System.out.println(data);
+	}
 }
