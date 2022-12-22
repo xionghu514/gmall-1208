@@ -9,6 +9,7 @@ import com.atguigu.gmall.pms.entity.SkuEntity;
 import com.atguigu.gmall.pms.entity.SkuImagesEntity;
 import com.atguigu.gmall.pms.entity.SpuAttrValueEntity;
 import com.atguigu.gmall.pms.entity.SpuEntity;
+import com.atguigu.gmall.pms.vo.SaleAttrValueVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,10 +74,14 @@ public interface GmallPmsApi {
             @RequestParam("spuId") Long spuId
     );
 
+
     @GetMapping("pms/skuattrvalue/search/attr/value/{cid}")
     @ApiOperation("根据分类Id和skuId查询销售属性集合")
     public ResponseVo<List<SkuAttrValueEntity>> querySkuAttrValueEntitiesBySkuIdAndCid(
             @PathVariable("cid") Long cid,
             @RequestParam("skuId") Long skuId
     );
+
+    @GetMapping("pms/skuattrvalue/spu/{spuId}")
+    public ResponseVo<List<SaleAttrValueVo>> querySaleAttrValuesBySpuId(@PathVariable("spuId") Long spuId);
 }

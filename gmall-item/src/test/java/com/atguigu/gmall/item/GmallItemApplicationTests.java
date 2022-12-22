@@ -6,6 +6,7 @@ import com.atguigu.gmall.item.feign.GmallSmsClient;
 import com.atguigu.gmall.item.feign.GmallWmsClient;
 import com.atguigu.gmall.pms.entity.CategoryEntity;
 import com.atguigu.gmall.pms.entity.SkuEntity;
+import com.atguigu.gmall.pms.vo.SaleAttrValueVo;
 import com.atguigu.gmall.sms.vo.ItemSaleVo;
 import com.atguigu.gmall.wms.entity.WareSkuEntity;
 import org.junit.jupiter.api.Test;
@@ -91,6 +92,7 @@ class GmallItemApplicationTests {
 	@Test
 	void test7() {
 		// 8.根据spuId查询spu下所有sku的销售属性列表
-
+		List<SaleAttrValueVo> data = pmsClient.querySaleAttrValuesBySpuId(7l).getData();
+		data.forEach(System.out::println);
 	}
 }
