@@ -7,14 +7,15 @@
 		<artifactId>gmall-1208</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+
 	<groupId>com.atguigu</groupId>
-	<artifactId>gmall-index</artifactId>
+	<artifactId>gmall-item</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gmall-index</name>
-	<description>谷粒商城首页工程</description>
+	<name>gmall-item</name>
+	<description>谷粒商城商品详情页工程</description>
 
 	<dependencies>
-		<!--公共依赖-->
+		<!-- 公共依赖	-->
 		<dependency>
 			<groupId>com.atguigu</groupId>
 			<artifactId>gmall-common</artifactId>
@@ -25,22 +26,15 @@
 			<artifactId>gmall-pms-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+			<groupId>com.atguigu</groupId>
+			<artifactId>gmall-wms-interface</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<groupId>com.atguigu</groupId>
+			<artifactId>gmall-sms-interface</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<!--	nacos注册中心		-->
@@ -67,24 +61,38 @@
 			<artifactId>spring-cloud-starter-zipkin</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.redisson</groupId>
-			<artifactId>redisson</artifactId>
-			<version>3.17.5</version>
-		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>io.projectreactor</groupId>
-			<artifactId>reactor-test</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
@@ -94,15 +102,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	<repositories>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 
 </project>
