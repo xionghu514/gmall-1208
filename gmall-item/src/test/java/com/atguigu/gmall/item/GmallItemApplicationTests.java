@@ -45,4 +45,10 @@ class GmallItemApplicationTests {
 		System.out.println(categoryEntityList);
 	}
 
+	@Test
+	void test2() {
+		// 3.根据品牌id查询品牌
+		System.out.println(pmsClient.queryBrandById(3l));
+	}
+
 }
