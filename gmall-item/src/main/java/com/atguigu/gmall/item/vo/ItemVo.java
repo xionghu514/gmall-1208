@@ -34,8 +34,8 @@ public class ItemVo {
     // sku图片信息
     private List<SkuImagesEntity> image;
 
-    // 销售属性
-    private List<SaleVo> sales;
+    // 营销属性
+    private List<ItemSaleVo> sales;
 
     // 是否有货
     private Boolean stock;

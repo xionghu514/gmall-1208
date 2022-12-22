@@ -2,8 +2,11 @@ package com.atguigu.gmall.item;
 
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.item.feign.GmallPmsClient;
+import com.atguigu.gmall.item.feign.GmallSmsClient;
+import com.atguigu.gmall.item.feign.GmallWmsClient;
 import com.atguigu.gmall.pms.entity.CategoryEntity;
 import com.atguigu.gmall.pms.entity.SkuEntity;
+import com.atguigu.gmall.sms.vo.ItemSaleVo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +18,12 @@ class GmallItemApplicationTests {
 
 	@Autowired
 	private GmallPmsClient pmsClient;
+
+	@Autowired
+	private GmallSmsClient smsClient;
+
+	@Autowired
+	private GmallWmsClient wmsClient;
 	/*
 	1.根据skuId查询sku
 	2.根据三级分类的id查询一二三级分类
@@ -63,4 +72,24 @@ class GmallItemApplicationTests {
 		System.out.println(pmsClient.querySkuImagesBySkuId(1l));
 	}
 
+	@Test
+	void test5() {
+		// 6.根据skuId查询营销信息
+		ResponseVo<List<ItemSaleVo>> responseVo = smsClient.querySalesBySkuId(7l);
+		List<ItemSaleVo> itemSaleVoList = responseVo.getData();
+		System.out.println(itemSaleVoList);
+	}
+
+//	@Test
+//	void test6() {
+//		// 7.根据skuId查询库存
+//		List<WareSkuEntity> data = wmsClient.queryWareSkuEntities(2l).getData();
+//		System.out.println(data);
+//	}
+
+	@Test
+	void test7() {
+		// 8.根据spuId查询spu下所有sku的销售属性列表
+
+	}
 }

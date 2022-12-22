@@ -9,7 +9,7 @@ import lombok.Data;
  * @Email: 1796235969@qq.com
  */
 @Data
-public class SaleVo {
+public class ItemSaleVo {
     private Long saleId;
     private String type;
     private String desc;
