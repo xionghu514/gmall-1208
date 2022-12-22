@@ -7,6 +7,7 @@ import com.atguigu.gmall.item.feign.GmallWmsClient;
 import com.atguigu.gmall.pms.entity.CategoryEntity;
 import com.atguigu.gmall.pms.entity.SkuEntity;
 import com.atguigu.gmall.sms.vo.ItemSaleVo;
+import com.atguigu.gmall.wms.entity.WareSkuEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -80,12 +81,12 @@ class GmallItemApplicationTests {
 		System.out.println(itemSaleVoList);
 	}
 
-//	@Test
-//	void test6() {
-//		// 7.根据skuId查询库存
-//		List<WareSkuEntity> data = wmsClient.queryWareSkuEntities(2l).getData();
-//		System.out.println(data);
-//	}
+	@Test
+	void test6() {
+		// 7.根据skuId查询库存
+		List<WareSkuEntity> data = wmsClient.queryWareSkuEntities(2l).getData();
+		System.out.println(data);
+	}
 
 	@Test
 	void test7() {
