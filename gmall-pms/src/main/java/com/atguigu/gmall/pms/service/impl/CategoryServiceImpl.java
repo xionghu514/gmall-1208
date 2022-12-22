@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -51,6 +52,21 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
         }
 
         return categoryEntities;
+    }
+
+    @Override
+    public List<CategoryEntity> queryLvl123CategoriesByCid3(Long cid3) {
+        CategoryEntity categoryEntity3 = getById(cid3);
+        if (categoryEntity3 == null) {
+            return null;
+        }
+        CategoryEntity categoryEntity2 = getById(categoryEntity3.getParentId());
+        if (categoryEntity2 == null) {
+            return null;
+        }
+        CategoryEntity categoryEntity = getById(categoryEntity2.getParentId());
+
+        return Arrays.asList(categoryEntity,categoryEntity2,categoryEntity3);
     }
 
 }

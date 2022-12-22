@@ -1,10 +1,14 @@
 package com.atguigu.gmall.item;
 
+import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.item.feign.GmallPmsClient;
+import com.atguigu.gmall.pms.entity.CategoryEntity;
 import com.atguigu.gmall.pms.entity.SkuEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 @SpringBootTest
 class GmallItemApplicationTests {
@@ -31,6 +35,14 @@ class GmallItemApplicationTests {
 //		1.根据skuId查询sku
 		SkuEntity skuEntity = pmsClient.querySkuById(1l).getData();
 		System.out.println(skuEntity);
+	}
+
+	@Test
+	void test1() {
+		// 2.根据三级分类的id查询一二三级分类
+		ResponseVo<List<CategoryEntity>> responseVo = pmsClient.queryLvl123CategoriesByCid3(225l);
+		List<CategoryEntity> categoryEntityList = responseVo.getData();
+		System.out.println(categoryEntityList);
 	}
 
 }

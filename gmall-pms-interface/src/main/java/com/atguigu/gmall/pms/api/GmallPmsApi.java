@@ -32,6 +32,7 @@ public interface GmallPmsApi {
     @ApiOperation("spu详情查询")
     public ResponseVo<SpuEntity> querySpuById(@PathVariable("id") Long id);
 
+
     @GetMapping("pms/sku/{id}")
     @ApiOperation("sku详情查询")
     public ResponseVo<SkuEntity> querySkuById(@PathVariable("id") Long id);
@@ -40,13 +41,18 @@ public interface GmallPmsApi {
     @ApiOperation("根据 spuId 查询 sku")
     public ResponseVo<List<SkuEntity>> querySkusBySpuId(@PathVariable("spuId") Long spuId);
 
+
     @GetMapping("pms/brand/{id}")
     @ApiOperation("详情查询")
     public ResponseVo<BrandEntity> queryBrandById(@PathVariable("id") Long id);
 
+
     @GetMapping("pms/category/{id}")
     @ApiOperation("详情查询")
     public ResponseVo<CategoryEntity> queryCategoryById(@PathVariable("id") Long id);
+
+    @GetMapping("pms/category/lvl123/{cid3}")
+    public ResponseVo<List<CategoryEntity>> queryLvl123CategoriesByCid3(@PathVariable("cid3") Long cid3);
 
     @GetMapping("pms/category/parent/{parentId}")
     public ResponseVo<List<CategoryEntity>> queryCategoryByPid(@PathVariable("parentId") Long pid);
