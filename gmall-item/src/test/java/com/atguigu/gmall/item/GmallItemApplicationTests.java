@@ -51,4 +51,10 @@ class GmallItemApplicationTests {
 		System.out.println(pmsClient.queryBrandById(3l));
 	}
 
+	@Test
+	void test3() {
+		// 4.根据spuId查询spu
+		System.out.println(pmsClient.querySpuById(7l));
+	}
+
 }
