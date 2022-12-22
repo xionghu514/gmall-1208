@@ -2,6 +2,8 @@ package com.atguigu.gmall.item.vo;
 
 import com.atguigu.gmall.pms.entity.CategoryEntity;
 import com.atguigu.gmall.pms.entity.SkuImagesEntity;
+import com.atguigu.gmall.pms.vo.SaleAttrValueVo;
+import com.atguigu.gmall.sms.vo.ItemSaleVo;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -34,7 +36,7 @@ public class ItemVo {
     // sku图片信息
     private List<SkuImagesEntity> image;
 
-    // 营销属性
+    // 销售属性
     private List<ItemSaleVo> sales;
 
     // 是否有货
