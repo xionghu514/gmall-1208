@@ -108,4 +108,16 @@ class GmallItemApplicationTests {
 		String data = pmsClient.queryMappingBySpuId(7l).getData();
 		System.out.println(data);
 	}
+
+	@Test
+	void test10() {
+		//11.根据spuId查询spu的描述信息
+		System.out.println(pmsClient.querySpuDescById(7l));
+	}
+
+	@Test
+	void testt11() {
+		// 12.查询规格参数分组及组下的规格参数和值
+		System.out.println(pmsClient.queryGroupWithAttrValuesByCidAndSpuIdAndSkuId(225l, 7l, 1l).getData());
+	}
 }

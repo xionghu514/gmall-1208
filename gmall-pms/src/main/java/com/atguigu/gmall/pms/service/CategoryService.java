@@ -23,5 +23,6 @@ public interface CategoryService extends IService<CategoryEntity> {
     List<CategoryEntity> queryLevel23CategoriesByPid(Long pid);
 
     List<CategoryEntity> queryLvl123CategoriesByCid3(Long cid3);
+
 }
 

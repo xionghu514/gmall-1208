@@ -8,7 +8,9 @@ import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
 import com.atguigu.gmall.pms.entity.SkuEntity;
 import com.atguigu.gmall.pms.entity.SkuImagesEntity;
 import com.atguigu.gmall.pms.entity.SpuAttrValueEntity;
+import com.atguigu.gmall.pms.entity.SpuDescEntity;
 import com.atguigu.gmall.pms.entity.SpuEntity;
+import com.atguigu.gmall.pms.vo.ItemGroupVo;
 import com.atguigu.gmall.pms.vo.SaleAttrValueVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +45,9 @@ public interface GmallPmsApi {
     @ApiOperation("根据 spuId 查询 sku")
     public ResponseVo<List<SkuEntity>> querySkusBySpuId(@PathVariable("spuId") Long spuId);
 
+    @GetMapping("pms/spudesc/{spuId}")
+    @ApiOperation("详情查询")
+    public ResponseVo<SpuDescEntity> querySpuDescById(@PathVariable("spuId") Long spuId);
 
     @GetMapping("pms/brand/{id}")
     @ApiOperation("详情查询")
@@ -90,4 +95,8 @@ public interface GmallPmsApi {
 
     @GetMapping("pms/skuattrvalue/mapping/{spuId}")
     public ResponseVo<String> queryMappingBySpuId(@PathVariable("spuId") Long spuId);
+
+
+    @GetMapping("pms/attrgroup/with/attr/value/{cid}")
+    public ResponseVo<List<ItemGroupVo>> queryGroupWithAttrValuesByCidAndSpuIdAndSkuId(@PathVariable("cid") Long cid, @RequestParam("spuId") Long spuId, @RequestParam("skuId") Long skuId);
 }

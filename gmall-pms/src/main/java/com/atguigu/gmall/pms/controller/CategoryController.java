@@ -32,6 +32,8 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+
+
     @GetMapping("lvl123/{cid3}")
     public ResponseVo<List<CategoryEntity>> queryLvl123CategoriesByCid3(@PathVariable("cid3") Long cid3) {
         List<CategoryEntity> categoryEntities = categoryService.queryLvl123CategoriesByCid3(cid3);
