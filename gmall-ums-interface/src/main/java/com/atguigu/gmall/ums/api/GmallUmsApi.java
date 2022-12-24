@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 public interface GmallUmsApi {
 
-    @GetMapping("query")
+    @GetMapping("ums/user/query")
     public ResponseVo<UserEntity> queryUser(@RequestParam("loginName") String loginName, @RequestParam("password") String password);
 
-    @PostMapping("/register")
+    @PostMapping("ums/user/register")
     public ResponseVo register(UserEntity userEntity, @RequestParam("code") String code);
 
-    @GetMapping("check/{data}/{type}")
+    @GetMapping("ums/user/check/{data}/{type}")
     public ResponseVo<Boolean> checkData(@PathVariable("data") String data, @PathVariable("type") Integer type);
 }

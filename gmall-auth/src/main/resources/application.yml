@@ -25,6 +25,12 @@ spring:
 feign:
   sentinel:
     enabled: true
-
+jwt:
+  pubKeyPath: E:\learn\rsa\rsa.pub
+  priKeyPath: E:\learn\rsa\rsa.pri
+  secret: 32142%^%^^&*hjshehsjknfwefdsd
+  expire: 500
+  cookieName: GMALL-TOKEN
+  unick: unick
 
 
