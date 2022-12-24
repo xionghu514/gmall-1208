@@ -39,6 +39,8 @@ spring:
           uri: lb://index-service
           predicates:
             - Path=/index/**
+          filters:
+            - Test=xxxx, yyyy
         - id: item-route
           uri: lb://item-service
           predicates:

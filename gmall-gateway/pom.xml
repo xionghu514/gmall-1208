@@ -25,6 +25,11 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+
 		<!--	nacos注册依赖		-->
 		<dependency>
 			<groupId>com.alibaba.cloud</groupId>
