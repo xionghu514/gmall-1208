@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Data
 public class ItemGroupVo {
-    private Long Id;
-    private String Name;
+    private Long id;
+    private String name;
     private List<AttrValueVo> attrs;
 }

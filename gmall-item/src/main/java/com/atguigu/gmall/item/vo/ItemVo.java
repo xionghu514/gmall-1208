@@ -19,42 +19,43 @@ import java.util.Map;
  */
 @Data
 public class ItemVo {
-    // sku 基本信息
-    private Long skuId;
-    private String title;
-    private String subtitle;
-    private String defaultImage;
-    private BigDecimal price;
-    private Integer weight;
+    // 面包屑所需要字段
+    private List<CategoryEntity> categories; // 三级分类
+    // 品牌
+    private Long brandId; // 品牌id
+    private String brandName; // 品牌名称
+    // spu
+    private Long spuId; // spuId
+    private String spuName; // spu 名称
 
-    // 面包屑所需字段
-    private List<CategoryEntity> categories;
+    // 基本信息
+    private Long skuId; // skuId
+    private String title; // 标题
+    private String subtitle; // 副标题
+    private BigDecimal price; // 价格
+    private Integer weight; // 重量
 
-    // 品牌所需字段
-    private Long brandId;
-    private String brandName;
+    private String defaultImage; // 默认图片
+    private List<SkuImagesEntity> image; // sku 图片列表
 
-    // sku图片信息
-    private List<SkuImagesEntity> image;
+    private List<ItemSaleVo> sales; // 营销类型
 
-    // 销售属性
-    private List<ItemSaleVo> sales;
+    private Boolean store = false; // 是否有货
 
-    // 是否有货
-    private Boolean stock;
+    // [{attrId: 3, attrName: 机身颜色, attrValues: ['白天白', '暗夜黑']}]
+    // [{attrId: 4, attrName: 运行内存, attrValues: ['8G', '12G']}]
+    // [{attrId: 5, attrName: 机身存储, attrValues: ['256G', '512G']}]
+    private List<SaleAttrValueVo> saleAttrs; // 销售属性列表
 
-    // [
-    //  {attrId:3, attrName:机身颜色, attrValues:["白天白","暗夜黑"]}，
-    //  {attrId:5, attrName:机身存储, attrValues:["256","512"]}，
-    // ]
-    private List<SaleAttrValueVo> saleAttrs;
+    // 当前 sku 的销售属性: {3: 白天白, 4: 12G, 5: 256G}
+    private Map<Long, String> saleAttr; // 当前 sku 的销售属性
 
-    // 当前销售属性{3: 白天白, 4: 8G, 5: 256G}
-    private Map<Long, String> saleAttr;
-
-    // 销售属性与skuId的映射关系{'白天白，8G，256G': 10,'暗夜黑，16G，256G': 11,'白天白，8G，128G': 12}
+    // 销售属性组合 与 skuId 的映射关系: {'白天白, 12G, 256G': 100, '白天白, 12G, 128G': 101, '白天白, 8G, 512G': 102}
     private String skuJsons;
 
-    private List<ItemGroupVo> groups;
+    // spu 的描述信息
+    private List<String> spuImages;
 
+    // 规格参数分组
+    private List<ItemGroupVo> groups;
 }

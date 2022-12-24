@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,6 +32,30 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping("query")
+    public ResponseVo<UserEntity> queryUser(
+            @RequestParam("loginName") String loginName,
+            @RequestParam("password") String password
+    ) {
+        UserEntity userEntity = userService.queryUser(loginName, password);
+
+        return ResponseVo.ok(userEntity);
+    }
+
+    @PostMapping("/register")
+    public ResponseVo register(UserEntity userEntity, @RequestParam("code") String code) {
+        userService.register(userEntity, code);
+
+        return ResponseVo.ok();
+    }
+
+    @GetMapping("check/{data}/{type}")
+    public ResponseVo<Boolean> checkData(@PathVariable("data") String data, @PathVariable("type") Integer type) {
+        Boolean flag = userService.checkData(data, type);
+
+        return ResponseVo.ok(flag);
+    }
 
     /**
      * 列表
