@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -25,7 +26,8 @@ public class IndexController {
 
 
     @GetMapping("/**")
-    public String index(Model model) {
+    public String index(Model model, @RequestHeader(value = "userId", required = false) Long userId) {
+        System.out.println("userId = " + userId);
         List<CategoryEntity> categoryEntityList = indexService.queryCategoriesByPid();
 
         model.addAttribute("categories", categoryEntityList);
