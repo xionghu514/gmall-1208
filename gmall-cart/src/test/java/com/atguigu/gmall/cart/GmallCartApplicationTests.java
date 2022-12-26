@@ -8,6 +8,7 @@ class GmallCartApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

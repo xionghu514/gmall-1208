@@ -6,7 +6,6 @@ import com.atguigu.gmall.cart.feign.GmallPmsClient;
 import com.atguigu.gmall.cart.feign.GmallSmsClient;
 import com.atguigu.gmall.cart.feign.GmallWmsClient;
 import com.atguigu.gmall.cart.interceptor.LoginInterceptor;
-import com.atguigu.gmall.cart.mapper.CartMapper;
 import com.atguigu.gmall.cart.pojo.Cart;
 import com.atguigu.gmall.cart.pojo.UserInfo;
 import com.atguigu.gmall.common.bean.ResponseVo;
@@ -15,14 +14,11 @@ import com.atguigu.gmall.pms.entity.SkuAttrValueEntity;
 import com.atguigu.gmall.pms.entity.SkuEntity;
 import com.atguigu.gmall.sms.vo.ItemSaleVo;
 import com.atguigu.gmall.wms.entity.WareSkuEntity;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,9 +33,6 @@ import java.util.List;
 public class CartService {
 
     @Autowired
-    private CartMapper cartMapper;
-
-    @Autowired
     private StringRedisTemplate redisTemplate;
 
     @Autowired
@@ -50,6 +43,9 @@ public class CartService {
 
     @Autowired
     private GmallSmsClient smsClient;
+
+    @Autowired
+    private CartSyncService cartSyncService;
 
     /**
      * 前缀
@@ -104,11 +100,7 @@ public class CartService {
 //            hashOps.put(skuId, JSON.toJSONString(cart));
 
             // 更新到数据库 mysql. 更新那个用户的哪条商品的购物车
-            cartMapper.update(
-                    cart, new UpdateWrapper<Cart>()
-                            .eq("user_id", userId)
-                            .eq("sku_id", skuId)
-            );
+            cartSyncService.updataCart(cart, userId, skuId);
         } else {
             // 不包含 新增记录, 此时购物车中只有两个参数 1. sku_id 2. count 其他参数需要调用远程接口进行设置 在保存到数据库
             cart.setUserId(userId);
@@ -158,7 +150,7 @@ public class CartService {
 //            hashOps.put(skuId, JSON.toJSONString(cart));
 
             // 保存到数据库 mysql
-            cartMapper.insert(cart);
+            cartSyncService.insertCart(cart);
         }
         // 不管是更新还是新增都会执行该方法 提取出来
         hashOps.put(skuId, JSON.toJSONString(cart));
@@ -198,7 +190,7 @@ public class CartService {
 
 
     @Async
-    public  ListenableFuture<String> exception1() {
+    public  void exception1() {
         try {
             System.out.println("exception1 开始执行");
             Thread.sleep(5000);
@@ -207,20 +199,20 @@ public class CartService {
             e.printStackTrace();
         }
 
-        return AsyncResult.forValue("hello word1");
+//        return AsyncResult.forValue("hello word1");
     }
 
     @Async
-    public ListenableFuture<String> exception2() {
+    public void exception2() {
         try {
             System.out.println("exception2 开始执行");
             Thread.sleep(4000);
-//            int i = 1/0;
+            int i = 1/0;
             System.out.println("exception2 执行结束");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return AsyncResult.forValue("hello word2");
+//        return AsyncResult.forValue("hello word2");
     }
 
 }
