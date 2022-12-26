@@ -1,10 +1,10 @@
 package com.atguigu.gmall.cart.controller;
 
-import com.atguigu.gmall.cart.interceptor.LoginInterceptor;
 import com.atguigu.gmall.cart.pojo.Cart;
 import com.atguigu.gmall.cart.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -42,9 +42,29 @@ public class CartController {
     @GetMapping("test")
     @ResponseBody
     public String test(HttpServletRequest request) {
+        long currentTimeMillis = System.currentTimeMillis();
+        ListenableFuture<String> result = cartService.exception1();
+        ListenableFuture<String> result2 = cartService.exception2();
+        try {
+            // 非阻塞方式获取返回结果
+            result.addCallback(res -> {
+                System.out.println(res);
+            }, ex -> {
+                System.out.println(ex);
+            });
 
-        System.out.println("这是controller方法" + LoginInterceptor.getUserInfo());
-
+            result2.addCallback(res -> {
+                System.out.println(res);
+            }, ex -> {
+                System.out.println(ex);
+            });
+            // 同步获取返回结果集
+//            System.out.println(result.get() + "============" + result2.get());
+        } catch (Exception e) {
+            System.out.println("e.getMessage() = " + e.getMessage());
+            e.printStackTrace();
+        }
+        System.out.println( "所用时间: " + (System.currentTimeMillis() - currentTimeMillis) + "毫秒");
         return "hello cart";
     }
 }
