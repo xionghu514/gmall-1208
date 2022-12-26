@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Description:
@@ -215,4 +216,115 @@ public class CartService {
 //        return AsyncResult.forValue("hello word2");
     }
 
+    public List<Cart> queryCarts() {
+        // 1. 以userKey查询未登录购物车
+        UserInfo userInfo = LoginInterceptor.getUserInfo();
+        String userKey = userInfo.getUserKey();
+        // 获取未登录购物车
+        BoundHashOperations<String, Object, Object> unloginHashOps = redisTemplate.boundHashOps(KEY_PREFIX + userKey);
+
+        // 将未登录购物车Json字符串转换成购物车集合
+        List<Object> cartJsons = unloginHashOps.values();
+
+        List<Cart> unloginCarts = null;
+        if (CollectionUtils.isNotEmpty(cartJsons)) {
+            unloginCarts = cartJsons.stream().map(cartJson -> JSON.parseObject(cartJson.toString(), Cart.class)).collect(Collectors.toList());
+
+        }
+
+        // 2. 判断是否登录，如果未登录就将未登录购物车返回(userId==null)
+        String userId = userInfo.getUserId().toString();
+        if (userId == null) {
+            return unloginCarts;
+        }
+
+        // 获取已登录购物车
+        BoundHashOperations<String, Object, Object> loginHashOps = redisTemplate.boundHashOps(KEY_PREFIX + userId.toString());
+
+        // 3. 合并未登录购物车和已登录购物车
+        if (CollectionUtils.isNotEmpty(unloginCarts)) {
+            unloginCarts.forEach(cart -> {
+                String skuId = cart.getSkuId().toString();
+
+                if (loginHashOps.hasKey(skuId)) {
+                    // 获取到登录购物车会覆盖数量，所以提前获取数量
+                    BigDecimal count = cart.getCount();
+                    // 已登录购物车包含此商品就修改数量
+                    String cartJson = loginHashOps.get(skuId).toString();
+                    cart = JSON.parseObject(cartJson, Cart.class);
+                    cart.setCount(cart.getCount().add(count));
+                    // mySql
+                    cartSyncService.updataCart(cart, userId.toString(), skuId.toString());
+
+                } else {
+                    // 已登录购物车不包含此商品就进行新增
+                    cart.setId(null);
+                    cart.setUserId(userId.toString());
+                    // mySql
+                    cartSyncService.insertCart(cart);
+                }
+                // redis
+                loginHashOps.put(skuId, JSON.toJSONString(cart));
+
+            });
+
+            // 4. 删除未登录购物车
+            // redis
+            redisTemplate.delete(KEY_PREFIX + userKey);
+
+            // mysql
+            cartSyncService.deleteByUserId(userKey);
+        }
+        // 5. 返回合并后的已登录购物车
+        List<Object> loginCartJsons = loginHashOps.values();
+        if (CollectionUtils.isNotEmpty(loginCartJsons)) {
+            List<Cart> loginCart = loginCartJsons.stream().map(loginCartJson -> JSON.parseObject(loginCartJson.toString(), Cart.class)).collect(Collectors.toList());
+
+            return loginCart;
+        }
+
+
+        return null;
+    }
+
+    public void updataNum(Cart cart) {
+        // 1. 获取登录状态
+        String userId = getUserId();
+        BoundHashOperations<String, Object, Object> hashOps = redisTemplate.boundHashOps(KEY_PREFIX + userId);
+
+        String skuId = cart.getSkuId().toString();
+        if (hashOps.hasKey(skuId)) {
+            // 2. 根据skuId获取购物车对象
+            Object cartJson = hashOps.get(skuId);
+
+            // 因为获取购物车对象会覆盖数据，所以提前获取数量
+            BigDecimal count = cart.getCount();
+
+            // 3. 将购物车json字符串反序列化成购物车对象
+            cart = JSON.parseObject(cartJson.toString(), Cart.class);
+            cart.setCount(count);
+
+            hashOps.put(skuId, JSON.toJSONString(cart));
+            cartSyncService.updataCart(cart, userId, skuId);
+        }
+
+    }
+
+    public void deleteCart(Long skuId) {
+        // 获取登陆状态
+        String userId = getUserId();
+
+        BoundHashOperations<String, Object, Object> hashOps = redisTemplate.boundHashOps(KEY_PREFIX + userId);
+
+        // 判断该用户是否有这个商品
+        if (hashOps.hasKey(skuId.toString())) {
+
+            // 删除商品
+            // redis
+            hashOps.delete(skuId.toString());
+            // mysql
+            cartSyncService.deleteByUserIdAndSkuId(userId, skuId);
+        }
+
+    }
 }
