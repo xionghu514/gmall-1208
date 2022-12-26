@@ -33,4 +33,14 @@ spring:
 feign:
   sentinel:
     enabled: true
+mybatis-plus: # mybatis-plus 配置
+  global-config:
+    db-config:
+      id-type: auto # id 策略, 生产应该使用分布式 id. auto 数据库自增
+jwt:
+  pubKeyPath: E:\learn\rsa\rsa.pub
+  cookieName: GMALL-TOKEN
+  userKey: user-key
+  expire: 864000
+
 
