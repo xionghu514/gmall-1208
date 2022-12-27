@@ -104,7 +104,7 @@ public class CartService {
 //            hashOps.put(skuId, JSON.toJSONString(cart));
 
             // 更新到数据库 mysql. 更新那个用户的哪条商品的购物车
-            cartSyncService.updataCart(cart, userId, skuId);
+            cartSyncService.updataCart(userId, cart, skuId);
             redisTemplate.opsForValue().set(PRICE_PREFIX + skuId, cart.getPrice().toString());
         } else {
             // 不包含 新增记录, 此时购物车中只有两个参数 1. sku_id 2. count 其他参数需要调用远程接口进行设置 在保存到数据库
@@ -155,7 +155,7 @@ public class CartService {
 //            hashOps.put(skuId, JSON.toJSONString(cart));
 
             // 保存到数据库 mysql
-            cartSyncService.insertCart(cart);
+            cartSyncService.insertCart(userId, cart);
 
             redisTemplate.opsForValue().set(PRICE_PREFIX + skuId, skuEntity.getPrice().toString());
         }
@@ -248,7 +248,7 @@ public class CartService {
         }
 
         // 2. 判断是否登录，如果未登录就将未登录购物车返回(userId==null)
-        String userId = userInfo.getUserId().toString();
+        Long userId = userInfo.getUserId();
         if (userId == null) {
             return unloginCarts;
         }
@@ -269,14 +269,14 @@ public class CartService {
                     cart = JSON.parseObject(cartJson, Cart.class);
                     cart.setCount(cart.getCount().add(count));
                     // mySql
-                    cartSyncService.updataCart(cart, userId.toString(), skuId.toString());
+                    cartSyncService.updataCart(userId.toString(), cart, skuId.toString());
 
                 } else {
                     // 已登录购物车不包含此商品就进行新增
                     cart.setId(null);
                     cart.setUserId(userId.toString());
                     // mySql
-                    cartSyncService.insertCart(cart);
+                    cartSyncService.insertCart(userId.toString(), cart);
                 }
                 // redis
                 loginHashOps.put(skuId, JSON.toJSONString(cart));
@@ -329,7 +329,7 @@ public class CartService {
             cart.setCount(count);
 
             hashOps.put(skuId, JSON.toJSONString(cart));
-            cartSyncService.updataCart(cart, userId, skuId);
+            cartSyncService.updataCart(userId, cart, skuId);
         }
 
     }

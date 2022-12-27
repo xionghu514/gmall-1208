@@ -21,12 +21,13 @@ public class CartSyncService {
     private CartMapper cartMapper;
 
     @Async
-    public void insertCart(Cart cart) {
+    public void insertCart(String userId, Cart cart) {
+        int i = 1/0;
         cartMapper.insert(cart);
     }
 
     @Async
-    public void updataCart(Cart cart, String userId, String skuId) {
+    public void updataCart(String userId, Cart cart, String skuId) {
         cartMapper.update(
                 cart, new UpdateWrapper<Cart>()
                         .eq("user_id", userId)
