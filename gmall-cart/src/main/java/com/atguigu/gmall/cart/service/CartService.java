@@ -2,6 +2,7 @@ package com.atguigu.gmall.cart.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.common.utils.CollectionUtils;
+import com.alibaba.nacos.common.utils.StringUtils;
 import com.atguigu.gmall.cart.feign.GmallPmsClient;
 import com.atguigu.gmall.cart.feign.GmallSmsClient;
 import com.atguigu.gmall.cart.feign.GmallWmsClient;
@@ -53,6 +54,8 @@ public class CartService {
      */
     private static final String KEY_PREFIX = "CART:INFO:";
 
+    private static final String PRICE_PREFIX = "CART:PRICE:";
+
     public void saveCart(Cart cart) {
 
         // 1. 获取登陆状态
@@ -102,6 +105,7 @@ public class CartService {
 
             // 更新到数据库 mysql. 更新那个用户的哪条商品的购物车
             cartSyncService.updataCart(cart, userId, skuId);
+            redisTemplate.opsForValue().set(PRICE_PREFIX + skuId, cart.getPrice().toString());
         } else {
             // 不包含 新增记录, 此时购物车中只有两个参数 1. sku_id 2. count 其他参数需要调用远程接口进行设置 在保存到数据库
             cart.setUserId(userId);
@@ -152,6 +156,8 @@ public class CartService {
 
             // 保存到数据库 mysql
             cartSyncService.insertCart(cart);
+
+            redisTemplate.opsForValue().set(PRICE_PREFIX + skuId, skuEntity.getPrice().toString());
         }
         // 不管是更新还是新增都会执行该方法 提取出来
         hashOps.put(skuId, JSON.toJSONString(cart));
@@ -228,7 +234,16 @@ public class CartService {
 
         List<Cart> unloginCarts = null;
         if (CollectionUtils.isNotEmpty(cartJsons)) {
-            unloginCarts = cartJsons.stream().map(cartJson -> JSON.parseObject(cartJson.toString(), Cart.class)).collect(Collectors.toList());
+            unloginCarts = cartJsons.stream().map(cartJson -> {
+                Cart cart = JSON.parseObject(cartJson.toString(), Cart.class);
+
+                // 设置实时价格
+                String s = redisTemplate.opsForValue().get(PRICE_PREFIX + cart.getSkuId());
+                if (StringUtils.isNotEmpty(s)) {
+                    cart.setCurrentPrice(new BigDecimal(s));
+                }
+                return cart;
+            }).collect(Collectors.toList());
 
         }
 
@@ -278,7 +293,16 @@ public class CartService {
         // 5. 返回合并后的已登录购物车
         List<Object> loginCartJsons = loginHashOps.values();
         if (CollectionUtils.isNotEmpty(loginCartJsons)) {
-            List<Cart> loginCart = loginCartJsons.stream().map(loginCartJson -> JSON.parseObject(loginCartJson.toString(), Cart.class)).collect(Collectors.toList());
+            List<Cart> loginCart = loginCartJsons.stream().map(loginCartJson -> {
+                Cart cart = JSON.parseObject(loginCartJson.toString(), Cart.class);
+                // 设置实时价格
+                String s = redisTemplate.opsForValue().get(PRICE_PREFIX + cart.getSkuId());
+                if (StringUtils.isNotEmpty(s)) {
+                    cart.setCurrentPrice(new BigDecimal(s));
+                }
+
+                return cart;
+            }).collect(Collectors.toList());
 
             return loginCart;
         }
