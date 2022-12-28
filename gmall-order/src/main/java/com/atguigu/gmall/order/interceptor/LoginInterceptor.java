@@ -1,6 +1,6 @@
 package com.atguigu.gmall.order.interceptor;
 
-import com.atguigu.gmall.order.pojo.UserInfo;
+import com.atguigu.gmall.order.vo.UserInfo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 

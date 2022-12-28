@@ -5,6 +5,7 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.oms.entity.OrderEntity;
 import com.atguigu.gmall.oms.service.OrderService;
+import com.atguigu.gmall.oms.vo.OrderSubmitVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,13 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @PostMapping("save/{userId}")
+    public ResponseVo saveOrder(@RequestBody OrderSubmitVo submitVo, @PathVariable("userId") Long userId) {
+        orderService.saveOrder(submitVo, userId);
+
+        return ResponseVo.ok();
+    }
 
     /**
      * 列表

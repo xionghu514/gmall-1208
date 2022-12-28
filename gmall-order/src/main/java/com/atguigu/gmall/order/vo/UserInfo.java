@@ -1,4 +1,4 @@
-package com.atguigu.gmall.order.pojo;
+package com.atguigu.gmall.order.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

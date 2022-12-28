@@ -25,6 +25,12 @@ spring:
   redis:
     host: 192.168.0.101
     port: 6379
+  rabbitmq:
+    host: 192.168.0.101
+    port: 5672
+    virtual-host: /admin
+    username: admin
+    password: admin
 feign:
   sentinel:
     enabled: true
