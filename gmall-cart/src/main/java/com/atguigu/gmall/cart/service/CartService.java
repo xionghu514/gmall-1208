@@ -351,4 +351,17 @@ public class CartService {
         }
 
     }
+
+    public List<Cart> queryCheckedCartsByUserId(Long userId) {
+        BoundHashOperations<String, Object, Object> hashOps = redisTemplate.boundHashOps(KEY_PREFIX + userId);
+        List<Object> cartsJson = hashOps.values();
+
+        // 判空，如果购物车json字符串不为空再进行遍历判断返回
+        if (CollectionUtils.isNotEmpty(cartsJson)) {
+            return cartsJson.stream().map(cartJson -> JSON.parseObject(cartJson.toString(), Cart.class))
+                    .filter(Cart::getCheck).collect(Collectors.toList());
+        }
+        // 如果购物车集合为空则报错
+        throw new RuntimeException("您的订单没有商品");
+    }
 }

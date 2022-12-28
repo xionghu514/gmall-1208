@@ -22,7 +22,6 @@ public class CartSyncService {
 
     @Async
     public void insertCart(String userId, Cart cart) {
-        int i = 1/0;
         cartMapper.insert(cart);
     }
 

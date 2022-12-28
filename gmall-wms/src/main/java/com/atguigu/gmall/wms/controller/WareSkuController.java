@@ -5,6 +5,7 @@ import com.atguigu.gmall.common.bean.PageResultVo;
 import com.atguigu.gmall.common.bean.ResponseVo;
 import com.atguigu.gmall.wms.entity.WareSkuEntity;
 import com.atguigu.gmall.wms.service.WareSkuService;
+import com.atguigu.gmall.wms.vo.SkuLockVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +33,13 @@ public class WareSkuController {
 
     @Autowired
     private WareSkuService wareSkuService;
+
+    @PostMapping("/check/lock/{orderToken}")
+    public ResponseVo<List<SkuLockVo>> checkLock(@RequestBody List<SkuLockVo> skuLockVos, @PathVariable("orderToken") String orderToken) {
+        skuLockVos = wareSkuService.checkLock(skuLockVos, orderToken);
+
+        return ResponseVo.ok(skuLockVos);
+    }
 
     @GetMapping("/sku/{skuId}")
     @ApiOperation("根据 skuId 查询 库存")
