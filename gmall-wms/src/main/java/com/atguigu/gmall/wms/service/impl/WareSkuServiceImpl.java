@@ -13,9 +13,11 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +36,9 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSkuEntity
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
     private static final String LOCK_FIX = "stock:lock:";
     private static final String KEY_FIX = "stock:info:";
 
@@ -48,6 +53,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSkuEntity
     }
 
     @Override
+    @Transactional
     public List<SkuLockVo> checkLock(List<SkuLockVo> skuLockVos, String orderToken) {
         // 判空
         if (CollectionUtils.isEmpty(skuLockVos)) {
@@ -72,6 +78,9 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSkuEntity
 
         // 锁定成功则将商品的数据保存到数据库，为以后取消订单做准备
         redisTemplate.opsForValue().set(KEY_FIX + orderToken, JSON.toJSONString(skuLockVos), 25, TimeUnit.HOURS);
+
+        // 发送消息到延时队列，到时间解锁库存
+        rabbitTemplate.convertAndSend("ORDER_MSG_EXCHANGE", "stock.unlock", orderToken);
 
         // 如果验库存锁库存成功就返回null
         return null;

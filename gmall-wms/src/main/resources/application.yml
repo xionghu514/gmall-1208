@@ -25,6 +25,19 @@ spring:
   redis:
     host: 192.168.0.101
     port: 6379
+  rabbitmq:
+    host: 192.168.0.101
+    port: 5672
+    virtual-host: /admin
+    username: admin
+    password: admin
+    listener:
+      simple:
+        prefetch: 1
+        concurrency: 8
+        acknowledge-mode: manual
+    publisher-confirm-type: correlated  # 异步非阻塞
+    publisher-returns: true  # 确认消息是否到达队列
 feign:
   sentinel:
     enabled: true

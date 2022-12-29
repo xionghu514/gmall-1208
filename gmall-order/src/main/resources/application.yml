@@ -1,5 +1,8 @@
 server:
   port: 18092
+  error:
+    include-exception: true
+    include-message: always
 spring:
   cloud:
     nacos:
@@ -31,6 +34,8 @@ spring:
     virtual-host: /admin
     username: admin
     password: admin
+    publisher-confirm-type: correlated  # 异步非阻塞
+    publisher-returns: true  # 确认消息是否到达队列
 feign:
   sentinel:
     enabled: true

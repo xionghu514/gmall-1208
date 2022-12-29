@@ -31,6 +31,13 @@ spring:
     virtual-host: /admin
     username: admin
     password: admin
+    listener:
+      simple:
+        prefetch: 1
+        concurrency: 8
+        acknowledge-mode: manual
+    publisher-confirm-type: correlated  # 异步非阻塞
+    publisher-returns: true  # 确认消息是否到达队列
 feign:
   sentinel:
     enabled: true

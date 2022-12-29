@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @Date: 2022/12/28 20:22
  * @Email: 1796235969@qq.com
  */
-public interface GmallOmsClient {
+public interface GmallOmsApi {
 
     @PostMapping("oms/order/save/{userId}")
     public ResponseVo saveOrder(@RequestBody OrderSubmitVo submitVo, @PathVariable("userId") Long userId);
