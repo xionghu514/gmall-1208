@@ -80,7 +80,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuMapper, WareSkuEntity
         redisTemplate.opsForValue().set(KEY_FIX + orderToken, JSON.toJSONString(skuLockVos), 25, TimeUnit.HOURS);
 
         // 发送消息到延时队列，到时间解锁库存
-        rabbitTemplate.convertAndSend("ORDER_MSG_EXCHANGE", "stock.unlock", orderToken);
+        rabbitTemplate.convertAndSend("ORDER_MSG_EXCHANGE", "stock.ttl", orderToken);
 
         // 如果验库存锁库存成功就返回null
         return null;

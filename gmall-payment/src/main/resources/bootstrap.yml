@@ -1,0 +1,8 @@
+# 服务名 配置中心地址
+spring:
+  application:
+    name: payment-service
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.0.101:8848
