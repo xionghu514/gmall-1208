@@ -67,6 +67,10 @@ spring:
             - Host=payment.gmall.com
           filters:
             - Auth=/
+        - id: payment-route
+          uri: lb://payment-service
+          predicates:
+            - Path=/pay/**
 jwt:
   pubKeyPath: E:\learn\rsa\rsa.pub
   cookieName: GMALL-TOKEN

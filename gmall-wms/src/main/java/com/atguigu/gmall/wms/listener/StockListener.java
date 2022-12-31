@@ -36,11 +36,48 @@ public class StockListener {
     private static final String KEY_FIX = "stock:info:";
 
     @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = "STOCK_MINUS_QUEUE"),
+            exchange = @Exchange(value = "ORDER_MSG_EXCHANGE", ignoreDeclarationExceptions = "true", type = ExchangeTypes.TOPIC),
+            key = {"stock.minus"}
+    ))
+    public void minus(String orderToken, Channel channel, Message message) throws IOException {
+        // 1.对数据判空
+        if (StringUtils.isBlank(orderToken)) {
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+            return;
+        }
+        // 2.获取订单Json数据
+        String skuLockVosJson = redisTemplate.opsForValue().get(KEY_FIX + orderToken);
+
+        if (StringUtils.isBlank(skuLockVosJson)) {
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+            return;
+        }
+        // 3.获取订单Json数据
+        List<SkuLockVo> skuLockVos = JSON.parseArray(skuLockVosJson, SkuLockVo.class);
+
+
+        if (CollectionUtils.isEmpty(skuLockVos)) {
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+            return;
+        }
+        // 4.遍历解锁库存
+        skuLockVos.forEach(skuLockVo -> {
+            wareSkuMapper.minus(skuLockVo.getWareSkuId(), skuLockVo.getCount());
+        });
+
+        // 5.将redis的锁定的缓存删除
+        redisTemplate.delete(KEY_FIX + orderToken);
+
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+    }
+
+    @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = "STOCK_UNLOCK_QUEUE"),
             exchange = @Exchange(value = "ORDER_MSG_EXCHANGE", ignoreDeclarationExceptions = "true", type = ExchangeTypes.TOPIC),
             key = {"order.failure", "stock.unlock"}
     ))
-    public void Unlock(String orderToken, Channel channel, Message message) throws IOException {
+    public void unlock(String orderToken, Channel channel, Message message) throws IOException {
         // 1.对数据判空
         if (StringUtils.isBlank(orderToken)) {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);

@@ -12,5 +12,8 @@
     <update id="unlock">
         UPDATE wms_ware_sku SET stock_locked = stock_locked - #{count} WHERE id = #{id}
     </update>
+    <update id="minus">
+        UPDATE wms_ware_sku SET stock_locked = stock_locked - #{count}, stock = stock - #{count}, sales = sales + #{count} WHERE id = #{id}
+    </update>
 
 </mapper>

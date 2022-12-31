@@ -1,6 +1,7 @@
 package com.atguigu.gmall.payment.interceptor;
 
 import com.atguigu.gmall.payment.vo.UserInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -24,7 +25,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 
         // 判断token是否为空，不为空获取userId
-        Long userId = Long.valueOf(request.getHeader("userId"));
+        String userIdStr = request.getHeader("userId");
+        Long userId = null;
+        if (StringUtils.isNotBlank(userIdStr)) {
+            userId = Long.valueOf(userIdStr);
+        }
 
         String username = request.getHeader("username");
 

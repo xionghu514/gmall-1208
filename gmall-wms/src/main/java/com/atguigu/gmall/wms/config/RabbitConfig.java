@@ -54,7 +54,7 @@ public class RabbitConfig {
      */
     @Bean
     public Queue ttlQueue() {
-        return QueueBuilder.durable("STOCK_TTL_QUEUE").ttl(400000)
+        return QueueBuilder.durable("STOCK_TTL_QUEUE").ttl(40000000)
                 .deadLetterExchange("ORDER_MSG_EXCHANGE")
                 .deadLetterRoutingKey("stock.unlock").build();
     }
